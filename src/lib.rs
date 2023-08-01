@@ -1,9 +1,5 @@
-use std::arch::x86_64::_mm256_sqrt_pd;
-
 use ndarray::prelude::*;
-use ndarray::CowRepr;
 use ndarray::Dim;
-use ndarray::OwnedRepr;
 use ndarray_rand::rand_distr::Uniform;
 use ndarray_rand::RandomExt;
 pub mod loss;
@@ -43,7 +39,6 @@ impl Model {
         for layer in self.layers.iter_mut().skip(1) {
             h = layer.forward(&h);
         }
-        let dim = h.dim();
         h
     }
 }

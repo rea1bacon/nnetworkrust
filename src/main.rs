@@ -1,16 +1,12 @@
 use csv::ReaderBuilder;
-use ndarray::arr2;
 use ndarray::s;
-use ndarray::Array0;
 use ndarray::Array2;
 use ndarray::ArrayBase;
 use ndarray::Axis;
-use ndarray::Zip;
 use noto::loss::mse;
 use noto::loss::mse_derivative;
 use noto::Layer;
 use noto::Model;
-use rand::Rng;
 fn main() {
     let mut model = Model::new();
     model.add_layer(Layer::init(784, 50).with_activation(noto::ActivationFunc::Sigmoid));
