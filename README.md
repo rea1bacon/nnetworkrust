@@ -32,7 +32,7 @@ pub fn backward(&mut self, output_error: Array2<f64>, learning_rate: f64) -> Arr
 }
 ```
 
-We need the compute this values : ![latex](https://latex.codecogs.com/svg.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20W%5Ei%7D) and ![latex](https://latex.codecogs.com/svg.image?%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20B%5Ei%7D)
+We need the compute this values : ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20W%5Ei%7D,%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20B%5Ei%7D)
 Where W is the matrix of weights and B the vector of biases for the i-th layer and c the cost function.
 
 We can compute the first one with the chain rule :
