@@ -1,0 +1,14 @@
+[package]
+name = "noto"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ndarray = { version="0.15.6", features=["rayon","matrixmultiply-threading"]}
+rayon = "1.7"
+fast-math = "0.1.1"
+ndarray-rand= "0.14.0"
+csv = "1"
+rand = "0.8.5"
