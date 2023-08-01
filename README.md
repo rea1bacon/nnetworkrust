@@ -54,4 +54,4 @@ let ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7
 
 We have ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DA%5Ei%3D%5Csigma%28Z%5Ei%29) where ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Csigma) is the activation function and ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DZ%5Ei%3DW%5EiX%5Ei&plus;B%5Ei).
 
-So j represents the the number of output and k the number of input of the layer i.
+So j represents the the number of output and k the number of input of the layer i. $a$
