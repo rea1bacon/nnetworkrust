@@ -32,13 +32,26 @@ pub fn backward(&mut self, output_error: Array2<f64>, learning_rate: f64) -> Arr
 }
 ```
 
-We need the compute this values : ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20W%5Ei%7D,%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20B%5Ei%7D)
+We need the compute this values : ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20W%5Ei%7D) and ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20B%5Ei%7D)
 Where W is the matrix of weights and B the vector of biases for the i-th layer and c the cost function.
 
 We can compute the first one with the chain rule :
 
-![latex](https://latex.codecogs.com/svg.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20W%5Ei%7D%20%3D%20%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20a%5Ei%7D%20%5Cfrac%7B%5Cpartial%20a%5Ei%7D%7B%5Cpartial%20z%5Ei%7D%20%5Cfrac%7B%5Cpartial%20z%5Ei%7D%7B%5Cpartial%20W%5Ei%7D)
+![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20W%5Ei%7D%20%3D%20%5Cfrac%7B%5Cpartial%20c%7D%7B%5Cpartial%20a%5Ei%7D%5Cfrac%7B%5Cpartial%20a%5Ei%7D%7B%5Cpartial%20z%5Ei%7D%5Cfrac%7B%5Cpartial%20z%5Ei%7D%7B%5Cpartial%20W%5Ei%7D)
+
+
 
 Where a is the activation function and z the output of the layer.
 
-To calculate it, it is easier to look at one weight at a time. Let's take the weight ![latex](https://latex.codecogs.com/svg.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DW_%7Bjk%7D%5Ei) for example. We have :
+To calculate it, it is easier to look at one weight at a time. Let's take the weight ![latex]( https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%20w_%7Bjk%7D%5Ei) for example. We have :
+
+For the layer i, we represent the matrix of weights as  
+![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DW%5Ei=%5Cbegin%7Bbmatrix%7Dw_%7B1,1%7D&.&.&w_%7B1,k%7D%5C%5C.&.&.&.%5C%5C.&.&.&.%5C%5Cw_%7Bj,1%7D&.&.&w_%7Bj,k%7D%5C%5C%5Cend%7Bbmatrix%7D) 
+and the vector of biases as 
+![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DB%5Ei=%5Cbegin%7Bbmatrix%7Db_1%5C%5C.%5C%5C.%5C%5C.%5C%5Cb_j%5C%5C%5Cend%7Bbmatrix%7D)
+
+let ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DX%5Ei) be the input of the layer i and ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DZ%5Ei) the output of the layer i before the activation function and ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DA%5Ei) the output of the layer i after the activation function.
+
+We have ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DA%5Ei%3D%5Csigma%28Z%5Ei%29) where ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7D%5Csigma) is the activation function and ![latex](https://latex.codecogs.com/gif.image?%5Cdpi%7B110%7D%5Cbg%7Bwhite%7DZ%5Ei%3DW%5EiX%5Ei&plus;B%5Ei).
+
+So j represents the the number of output and k the number of input of the layer i.
