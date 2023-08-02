@@ -40,7 +40,7 @@ We need to compute this values : $\frac{\partial c}{\partial W^i}$ and $\frac{\p
 
 
 
-For the layer $i$, we represent the matrix of weights as  $W^i=\begin{bmatrix}w_{1,1}&.&.&w_{1,k}\\.&.&.&.\\.&.&.&.\\w_{j,1}&.&.&w_{j,k}\\\end{bmatrix}$
+For the layer $i$, we represent the matrix of weights as  <!-- $W^i=\begin{bmatrix}w_{1,1}&.&.&w_{1,k}\\.&.&.&.\\.&.&.&.\\w_{j,1}&.&.&w_{j,k}\\\end{bmatrix}$ --> <img style="transform: translateY(0.1em); background: white;" src="svg/YWSRPMJ6l7.svg">
 and the vector of biases as $B^i=\begin{bmatrix}b_1\\.\\.\\.\\b_j\\\end{bmatrix}$
 
 So we know that $ \frac{\partial c}{\partial W^i} = \begin{bmatrix}\frac{\partial c}{\partial w_{1,1}^i}&.&.&\frac{\partial c}{\partial w_{1,k}^i}\\.&.&.&.\\.&.&.&.\\\frac{\partial c}{\partial w_{j,1}^i}&.&.&\frac{\partial c}{\partial w_{j,k}^i}\\\end{bmatrix}$ (partial derivative of a scalar with respect to a matrix)
