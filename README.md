@@ -40,43 +40,121 @@ We need to compute this values : $\frac{\partial c}{\partial W^i}$ and $\frac{\p
 
 
 
-For the layer $i$, we represent the matrix of weights as  $W^i=\begin{bmatrix}w_{1,1}&.&.&w_{1,k}\\.&.&.&.\\.&.&.&.\\w_{j,1}&.&.&w_{j,k}\\\end{bmatrix}$
-and the vector of biases as $B^i=\begin{bmatrix}b_1\\.\\.\\.\\b_j\\\end{bmatrix}$
+For the layer $i$, we represent the matrix of weights as  
+```math 
+W^i=\begin{bmatrix}w_{1,1}&.&.&w_{1,k}\\.&.&.&.\\.&.&.&.\\w_{j,1}&.&.&w_{j,k}\\\end{bmatrix}
+```
+and the vector of biases as 
+```math
+B^i=\begin{bmatrix}b_1\\.\\.\\.\\b_j\\\end{bmatrix}
+```
 
-So we know that $ \frac{\partial c}{\partial W^i} = \begin{bmatrix}\frac{\partial c}{\partial w_{1,1}^i}&.&.&\frac{\partial c}{\partial w_{1,k}^i}\\.&.&.&.\\.&.&.&.\\\frac{\partial c}{\partial w_{j,1}^i}&.&.&\frac{\partial c}{\partial w_{j,k}^i}\\\end{bmatrix}$ (partial derivative of a scalar with respect to a matrix)
+So we know that
+```math
+\frac{\partial c}{\partial W^i} = \begin{bmatrix}\frac{\partial c}{\partial w_{1,1}^i}&.&.&\frac{\partial c}{\partial w_{1,k}^i}\\.&.&.&.\\.&.&.&.\\\frac{\partial c}{\partial w_{j,1}^i}&.&.&\frac{\partial c}{\partial w_{j,k}^i}\\\end{bmatrix}
+```
+(partial derivative of a scalar with respect to a matrix)
 
 Now let's calculate $\frac{\partial c}{\partial w_{1,1}^i}$ for example.
 
 By the chain rule, we have $\frac{\partial c}{\partial w_{1,1}^i} = \frac{\partial c}{Z^i}\frac{\partial Z^i}{\partial w_{1,1}^i}$.
 
-We know that $\frac{\partial Z^i}{\partial w_{1,1}^i} = \begin{bmatrix}\frac{\partial Z_1^i}{\partial w_{1,1}^i}\\.\\.\\\frac{\partial Z_j^i}{\partial w_{1,1}^i}\\\end{bmatrix}$ which is equal to $\begin{bmatrix}X_1^i\\0\\.\\.\\0\\\end{bmatrix}$ because $Z^i = \begin{bmatrix}w_{1,1}&.&.&w_{1,k}\\.&.&.&.\\.&.&.&.\\w_{j,1}&.&.&w_{j,k}\\\end{bmatrix} \begin{bmatrix}X_1^i\\.\\.\\.\\X_k^i\\\end{bmatrix} + \begin{bmatrix}b_1\\.\\.\\.\\b_j\\\end{bmatrix}$ so the partial derivative of the biases with respect to $w_{1,1}^i$ will be equal to 0.
+We know that 
+```math
+\frac{\partial Z^i}{\partial w_{1,1}^i} = \begin{bmatrix}\frac{\partial Z_1^i}{\partial w_{1,1}^i}\\.\\.\\\frac{\partial Z_j^i}{\partial w_{1,1}^i}\\\end{bmatrix}
+```
+ which is equal to 
+ ```math
+\begin{bmatrix}X_1^i\\0\\.\\.\\0\\\end{bmatrix}
+```
+because 
+```math
+Z^i = \begin{bmatrix}w_{1,1}&.&.&w_{1,k}\\.&.&.&.\\.&.&.&.\\w_{j,1}&.&.&w_{j,k}\\\end{bmatrix} \begin{bmatrix}X_1^i\\.\\.\\.\\X_k^i\\\end{bmatrix} + \begin{bmatrix}b_1\\.\\.\\.\\b_j\\\end{bmatrix}
+```
+so the partial derivative of the biases with respect to $w_{1,1}^i$ will be equal to 0.
 
-Also $\begin{bmatrix}w_{1,1}^i&.&.&w_{1,k}^i\\.&.&.&.\\.&.&.&.\\w_{j,1}^i&.&.&w_{j,k}^i\\\end{bmatrix} \begin{bmatrix}X_1^i\\.\\.\\.\\X_k^i\\\end{bmatrix} = \begin{bmatrix}w_{1,1}^iX_1^i + ... + w_{1,k}^iX_k^i\\.\\.\\.\\w_{j,1}^iX_1^i + ... + w_{j,k}^iX_k^i\\\end{bmatrix}$ so the partial derivative with respect to $w_{1,1}^i$ will be equal to $\begin{bmatrix}X_1^i\\0\\.\\.\\0\\\end{bmatrix}$.
+Also 
+```math
+\begin{bmatrix}w_{1,1}^i&.&.&w_{1,k}^i\\.&.&.&.\\.&.&.&.\\w_{j,1}^i&.&.&w_{j,k}^i\\\end{bmatrix} \begin{bmatrix}X_1^i\\.\\.\\.\\X_k^i\\\end{bmatrix} = \begin{bmatrix}w_{1,1}^iX_1^i + ... + w_{1,k}^iX_k^i\\.\\.\\.\\w_{j,1}^iX_1^i + ... + w_{j,k}^iX_k^i\\\end{bmatrix}
+```
+so the partial derivative with respect to $w_{1,1}^i$ will be equal to 
+```math
+\begin{bmatrix}X_1^i\\0\\.\\.\\0\\\end{bmatrix}
+```
 
-So now we have $\frac{\partial c}{\partial w_{1,1}^i} = \frac{\partial c}{\partial A^i}\frac{\partial A^i}{\partial Z^i}\begin{bmatrix}X_1^i\\0\\.\\.\\0\\\end{bmatrix} = \begin{bmatrix}\frac{\partial c }{\partial Z^i_1} \times X^i_1\end{bmatrix}$ We can generalize this to $\forall (a,b) \in [1,j]\times[1,k], \frac{\partial c}{\partial w_{a,b}^i} = \frac{\partial c }{\partial Z^i_a} \times X^i_b$. 
+So now we have 
+```math 
+\frac{\partial c}{\partial w_{1,1}^i} = \frac{\partial c}{\partial A^i}\frac{\partial A^i}{\partial Z^i}\begin{bmatrix}X_1^i\\0\\.\\.\\0\\\end{bmatrix} = \begin{bmatrix}\frac{\partial c }{\partial Z^i_1} \times X^i_1\end{bmatrix}
+```
+We can generalize this to $\forall (a,b) \in [1,j]\times[1,k], \frac{\partial c}{\partial w_{a,b}^i} = \frac{\partial c }{\partial Z^i_a} \times X^i_b$. 
 
-We finally have $\frac{\partial c}{\partial W^i} = \begin{bmatrix}\frac{\partial c }{\partial Z^i_1} \times X^i_1&\cdots&\frac{\partial c }{\partial Z^i_k} \times X^i_1\\\vdots&\ddots&\vdots\\\frac{\partial c }{\partial Z^i_1} \times X^i_j&\cdots&\frac{\partial c }{\partial Z^i_k} \times X^i_j\\\end{bmatrix}$ which can be simplified to $\frac{\partial c}{\partial Z^i} \cdot {X^i}^\intercal = \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\\vdots\\\frac{\partial c}{\partial Z^i_1}\end{bmatrix}\cdot \begin{bmatrix}X^i_1&\cdots&X^i_j\end{bmatrix}$
+We finally have 
+```math
+\frac{\partial c}{\partial W^i} = \begin{bmatrix}\frac{\partial c }{\partial Z^i_1} \times X^i_1&\cdots&\frac{\partial c }{\partial Z^i_k} \times X^i_1\\\vdots&\ddots&\vdots\\\frac{\partial c }{\partial Z^i_1} \times X^i_j&\cdots&\frac{\partial c }{\partial Z^i_k} \times X^i_j\\\end{bmatrix}
+```
+which can be simplified to 
+```math
+\frac{\partial c}{\partial Z^i} \cdot {X^i}^\intercal = \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\\vdots\\\frac{\partial c}{\partial Z^i_1}\end{bmatrix}\cdot \begin{bmatrix}X^i_1&\cdots&X^i_j\end{bmatrix}
+```
 
 We now need to compute $\frac{\partial c}{\partial B^i}$.
 
-We know that $\frac{\partial c}{\partial B^i} = \begin{bmatrix}\frac{\partial c}{\partial b_1^i}\\.\\.\\.\\\frac{\partial c}{\partial b_j^i}\\\end{bmatrix}$
+We know that 
+```math
+\frac{\partial c}{\partial B^i} = \begin{bmatrix}\frac{\partial c}{\partial b_1^i}\\.\\.\\.\\\frac{\partial c}{\partial b_j^i}\\\end{bmatrix}
+```
 
-We have $\frac{\partial c}{\partial b_1^i} = \frac{\partial c}{\partial Z^i}\frac{\partial Z^i}{\partial b_1^i}$. We can easily notice that $\frac{\partial Z^i}{\partial b_1^i} = \begin{bmatrix}1\\0\\.\\.\\0\\\end{bmatrix}$. So $\frac{\partial c}{\partial b_1^i} = \frac{\partial c}{\partial Z^i_1}$. We can generalize this to $\forall a \in [1,j], \frac{\partial c}{\partial b_a^i} = \frac{\partial c}{\partial Z^i_a}$. So $\frac{\partial c}{\partial B^i} = \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = \frac{\partial c}{\partial Z^i}$
+We have 
+```math
+\frac{\partial c}{\partial b_1^i} = \frac{\partial c}{\partial Z^i}\frac{\partial Z^i}{\partial b_1^i}
+```
+We can easily notice that 
+```math
+\frac{\partial Z^i}{\partial b_1^i} = \begin{bmatrix}1\\0\\.\\.\\0\\\end{bmatrix}
+```
+So $\frac{\partial c}{\partial b_1^i} = \frac{\partial c}{\partial Z^i_1}$. We can generalize this to $\forall a \in [1,j], \frac{\partial c}{\partial b_a^i} = \frac{\partial c}{\partial Z^i_a}$. 
+So 
+```math
+\frac{\partial c}{\partial B^i} = \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = \frac{\partial c}{\partial Z^i}
+```
 
-Finally we need to calculate $\frac{\partial c}{\partial X^i}$ to feed it to the $i-1$ nth layer. We have $\frac{\partial c}{\partial X^i} = \begin{bmatrix}\frac{\partial c}{\partial X^i_1}\\.\\.\\.\\\frac{\partial c}{\partial X^i_k}\\\end{bmatrix}$
+Finally we need to calculate $\frac{\partial c}{\partial X^i}$ to feed it to the $i-1$ nth layer. We have 
+```math
+\frac{\partial c}{\partial X^i} = \begin{bmatrix}\frac{\partial c}{\partial X^i_1}\\.\\.\\.\\\frac{\partial c}{\partial X^i_k}\\\end{bmatrix}
+```
 
 Let's look at $\frac{\partial c}{\partial X^i_1}$. We have $\frac{\partial c}{\partial X^i_1} = \frac{\partial c}{\partial Z^i}\frac{\partial Z^i}{\partial X^i_1}$. 
-$\frac{\partial Z^i}{\partial X^i_1}$ is equal to $ \begin{bmatrix}w_{1,1}^i\\.\\.\\.\\w_{j,1}^i\\\end{bmatrix}$. So $\frac{\partial c}{\partial X^i_1} = \begin{bmatrix}w_{1,1}^i\\.\\.\\.\\w_{j,1}^i\\\end{bmatrix} \cdot \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = \begin{bmatrix}w_{1,1}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,1}^i\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix}$. 
+$\frac{\partial Z^i}{\partial X^i_1}$ is equal to 
+```math
+\begin{bmatrix}w_{1,1}^i\\.\\.\\.\\w_{j,1}^i\\\end{bmatrix}
+```
+So 
+```math
+\frac{\partial c}{\partial X^i_1} = \begin{bmatrix}w_{1,1}^i\\.\\.\\.\\w_{j,1}^i\\\end{bmatrix} \cdot \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = \begin{bmatrix}w_{1,1}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,1}^i\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix}
+```
 
-By generalizing this to $\forall a \in [1,k], \frac{\partial c}{\partial X^i_a} = \begin{bmatrix}w_{1,a}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,a}^i\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix}$ we get $\frac{\partial c}{\partial X^i} = \begin{bmatrix}w_{1,1}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,1}^i\frac{\partial c}{\partial Z^i_j}\\.\\.\\.\\w_{1,k}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,k}^i\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = \begin{bmatrix}w_{1,1}^i&...&w_{j,1}^i\\\vdots&\ddots&\vdots\\w_{1,k}^i&...&w_{j,k}^i\\\end{bmatrix} \cdot \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = {W^i}^\intercal \cdot \frac{\partial c}{\partial Z^i}$
+By generalizing this to 
+```math
+\forall a \in [1,k], \frac{\partial c}{\partial X^i_a} = \begin{bmatrix}w_{1,a}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,a}^i\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix}
+```
+we get 
+```math
+\frac{\partial c}{\partial X^i} = \begin{bmatrix}w_{1,1}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,1}^i\frac{\partial c}{\partial Z^i_j}\\.\\.\\.\\w_{1,k}^i\frac{\partial c}{\partial Z^i_1} + ... + w_{j,k}^i\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = \begin{bmatrix}w_{1,1}^i&...&w_{j,1}^i\\\vdots&\ddots&\vdots\\w_{1,k}^i&...&w_{j,k}^i\\\end{bmatrix} \cdot \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix} = {W^i}^\intercal \cdot \frac{\partial c}{\partial Z^i}
+```
 
-We now have all the gradients we need except for $\frac{\partial c}{\partial Z^i}$. We have $\frac{\partial c}{\partial Z^i} = \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix}$. 
+We now have all the gradients we need except for $\frac{\partial c}{\partial Z^i}$. We have 
+```math
+\frac{\partial c}{\partial Z^i} = \begin{bmatrix}\frac{\partial c}{\partial Z^i_1}\\.\\.\\.\\\frac{\partial c}{\partial Z^i_j}\\\end{bmatrix}
+```
 
 Let's look at $\frac{\partial c}{\partial Z^i_1}$.
 
 $\frac{\partial c}{\partial Z^i_1} = \frac{\partial c}{\partial A^i_1}\frac{\partial A^i_1}{\partial Z^i_1} + ... + \frac{\partial c}{\partial A^i_j}\frac{\partial A^i_j}{\partial Z^i_1} $. $\forall a \in [1,j] \setminus \{1\}, \frac{\partial A^i_a}{\partial Z^i_1} = 0$ and $\frac{\partial A^i_1}{\partial Z^i_1} = \sigma'(Z^i_i)$.
 
-So $\frac{\partial c}{\partial Z^i_1} = \frac{\partial c}{\partial A^i_1}\sigma'(Z^i_i)$. By generalizing this to $\forall a \in [1,j], \frac{\partial c}{\partial Z^i_a} = \frac{\partial c}{\partial A^i_a}\sigma'(Z^i_a)$ we get $\frac{\partial c}{\partial Z^i} = \begin{bmatrix}\frac{\partial c}{\partial A^i_1}\sigma'(Z^i_1)\\.\\.\\.\\\frac{\partial c}{\partial A^i_j}\sigma'(Z^i_j)\\\end{bmatrix} = \begin{bmatrix}\frac{\partial c}{\partial A^i_1}\\.\\.\\.\\\frac{\partial c}{\partial A^i_j}\\\end{bmatrix} \odot \begin{bmatrix}\sigma'(Z^i_1)\\.\\.\\.\\\sigma'(Z^i_j)\\\end{bmatrix} = \frac{\partial c}{\partial A^i} \odot \sigma'(Z^i)$.
+So $\frac{\partial c}{\partial Z^i_1} = \frac{\partial c}{\partial A^i_1}\sigma'(Z^i_i)$. By generalizing this to $\forall a \in [1,j], \frac{\partial c}{\partial Z^i_a} = \frac{\partial c}{\partial A^i_a}\sigma'(Z^i_a)$ we get 
+```math
+\frac{\partial c}{\partial Z^i} = \begin{bmatrix}\frac{\partial c}{\partial A^i_1}\sigma'(Z^i_1)\\.\\.\\.\\\frac{\partial c}{\partial A^i_j}\sigma'(Z^i_j)\\\end{bmatrix} = \begin{bmatrix}\frac{\partial c}{\partial A^i_1}\\.\\.\\.\\\frac{\partial c}{\partial A^i_j}\\\end{bmatrix} \odot \begin{bmatrix}\sigma'(Z^i_1)\\.\\.\\.\\\sigma'(Z^i_j)\\\end{bmatrix} = \frac{\partial c}{\partial A^i} \odot \sigma'(Z^i)
+```
 
 Now we can examine the code :
 
