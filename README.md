@@ -3,31 +3,30 @@
 This is a simple neural network written in rust. It is not optimized for speed and efficiency.
 It was written as a learning experience.
 
-Gets around 90% accuracy on the MNIST dataset with the following parameters:
-- 5 layers
+Gets around 94% accuracy on the MNIST dataset with the following parameters:
+- 3 layers
 ```
-first layer : 784 inputs, 50 neurons, activation function : sigmoid
-second layer : 50 inputs, 100 neurons, activation function : sigmoid
-third layer : 100 inputs, 60 neurons, activation function : tanh
-fourth layer : 60 inputs, 40 neurons, activation function : sigmoid
-fifth layer : 40 inputs, 10 neurons, activation function : softmax
+first layer : 784 inputs, 100 neurons, activation function : sigmoid
+second layer : 100 inputs, 512 neurons, activation function : Relu
+third layer : 512 inputs, 10 neurons, activation function : softmax
 ```
 - batch size: 100
-- learning rate: 0.2
+- learning rate: 0.01
+- loss function: cross entropy
 
  ## Backpropagation explanation
 
 The backpropagation algorithm is used to calculate the gradient of the loss function with respect to the weights and biases of the network. This gradient is then used to update the weights and biases of the network in the direction of the minimum of the loss function.
 
-After forwarding the input, we compute the the gradient to update the weights and biases. Here is the code :
+After forwarding the input, we compute the gradient to update the weights and biases. Here is the code :
 
 ```rust
 pub fn backward(&mut self, output_error: Array2<f64>, learning_rate: f64) -> Array2<f64> {
-    let output_error = self.activation.apply_der(&self.output).t().to_owned() * output_error;
-    let inp_err = output_error.dot(&self.weights);
-    let weight_err = self.input.dot(&output_error);
-    self.weights = &self.weights - learning_rate * &weight_err.t();
-    self.bias = &self.bias - learning_rate * &output_error.t();
+    let output_error = self.activation.apply_der(&self.output) * output_error;
+    let inp_err = self.weights.t().dot(&output_error);
+    let weight_err = output_error.dot(&self.input.t());
+    self.weights = &self.weights - learning_rate * &weight_err;
+    self.bias = &self.bias - learning_rate * &output_error;
     inp_err
 }
 ```
@@ -35,9 +34,9 @@ Let $X^i$ be the input of the layer $i$ and $Z^i$ the output of the layer $i$ be
 
 We have $A^i = \sigma(Z^i)$ where $\sigma$ is the activation function and $Z^i = W^i X^i + B^i$. Where $W^i$ is the matrix of weights and $B^i$ the vector of biases for the $i$-th layer and $c$ the cost function.
 
-$j$ represents the the number of output and $k$ the number of input of the layer $i$. 
+$j$ represents the number of outputs and $k$ the number of inputs of the layer $i$. 
 
-We need the compute this values : $\frac{\partial c}{\partial W^i}$ and $\frac{\partial c}{\partial B^i}$. We will assume that  $\frac{\partial c}{\partial A^i}$ is known (which is equal to $\frac{\partial c}{\partial X^{i+1}}$)
+We need to compute this values : $\frac{\partial c}{\partial W^i}$ and $\frac{\partial c}{\partial B^i}$. We will assume that  $\frac{\partial c}{\partial A^i}$ is known (which is equal to $\frac{\partial c}{\partial X^{i+1}}$)
 
 
 
@@ -48,7 +47,7 @@ So we know that $ \frac{\partial c}{\partial W^i} = \begin{bmatrix}\frac{\partia
 
 Now let's calculate $\frac{\partial c}{\partial w_{1,1}^i}$ for example.
 
-So by the chain rule, we have $\frac{\partial c}{\partial w_{1,1}^i} = \frac{\partial c}{Z^i}\frac{\partial Z^i}{\partial w_{1,1}^i}$.
+By the chain rule, we have $\frac{\partial c}{\partial w_{1,1}^i} = \frac{\partial c}{Z^i}\frac{\partial Z^i}{\partial w_{1,1}^i}$.
 
 We know that $\frac{\partial Z^i}{\partial w_{1,1}^i} = \begin{bmatrix}\frac{\partial Z_1^i}{\partial w_{1,1}^i}\\.\\.\\\frac{\partial Z_j^i}{\partial w_{1,1}^i}\\\end{bmatrix}$ which is equal to $\begin{bmatrix}X_1^i\\0\\.\\.\\0\\\end{bmatrix}$ because $Z^i = \begin{bmatrix}w_{1,1}&.&.&w_{1,k}\\.&.&.&.\\.&.&.&.\\w_{j,1}&.&.&w_{j,k}\\\end{bmatrix} \begin{bmatrix}X_1^i\\.\\.\\.\\X_k^i\\\end{bmatrix} + \begin{bmatrix}b_1\\.\\.\\.\\b_j\\\end{bmatrix}$ so the partial derivative of the biases with respect to $w_{1,1}^i$ will be equal to 0.
 
@@ -78,3 +77,37 @@ Let's look at $\frac{\partial c}{\partial Z^i_1}$.
 $\frac{\partial c}{\partial Z^i_1} = \frac{\partial c}{\partial A^i_1}\frac{\partial A^i_1}{\partial Z^i_1} + ... + \frac{\partial c}{\partial A^i_j}\frac{\partial A^i_j}{\partial Z^i_1} $. $\forall a \in [1,j] \setminus \{1\}, \frac{\partial A^i_a}{\partial Z^i_1} = 0$ and $\frac{\partial A^i_1}{\partial Z^i_1} = \sigma'(Z^i_i)$.
 
 So $\frac{\partial c}{\partial Z^i_1} = \frac{\partial c}{\partial A^i_1}\sigma'(Z^i_i)$. By generalizing this to $\forall a \in [1,j], \frac{\partial c}{\partial Z^i_a} = \frac{\partial c}{\partial A^i_a}\sigma'(Z^i_a)$ we get $\frac{\partial c}{\partial Z^i} = \begin{bmatrix}\frac{\partial c}{\partial A^i_1}\sigma'(Z^i_1)\\.\\.\\.\\\frac{\partial c}{\partial A^i_j}\sigma'(Z^i_j)\\\end{bmatrix} = \begin{bmatrix}\frac{\partial c}{\partial A^i_1}\\.\\.\\.\\\frac{\partial c}{\partial A^i_j}\\\end{bmatrix} \odot \begin{bmatrix}\sigma'(Z^i_1)\\.\\.\\.\\\sigma'(Z^i_j)\\\end{bmatrix} = \frac{\partial c}{\partial A^i} \odot \sigma'(Z^i)$.
+
+Now we can examine the code :
+
+Suppose we have $l$ layer in our network. We first calculate $\frac{\partial c}{\partial A^l}$ :
+```rust
+let mut error = cross_entropy_prime(&label_array, &pred);
+```
+
+Then we iterate over each layer in reverse order:
+```rust
+for layer in model.layers.iter_mut().rev() {
+    error = layer.backward(error, LEARNING_RATE);
+}
+```
+
+The `backward` function returns $\frac{\partial c}{\partial X^i}$ and updates the weights and biases of the layer. Let's look at the code for the `backward` function of the `Layer` struct :
+
+We first calculate $\frac{\partial c}{\partial Z^i} = \sigma'(Z^i) \odot \frac{\partial c}{\partial A^i}$ :
+```rust
+let output_error = self.activation.apply_der(&self.output) * output_error;
+```
+
+Then we calculate $\frac{\partial c}{\partial X^i} = {W^i}^\intercal \cdot \frac{\partial c}{\partial Z^i}$ :
+```rust
+let inp_err = self.weights.t().dot(&output_error);
+```
+
+Finally we calculate $\frac{\partial c}{\partial W^i} = \frac{\partial c}{\partial Z^i}{X^i}^\intercal$ and $\frac{\partial c}{\partial B^i} = \frac{\partial c}{\partial Z^i}$ ,update the weights and biases and return $\frac{\partial c}{\partial X^i}$ :
+```rust
+let weight_err = output_error.dot(&self.input.t());
+self.weights = &self.weights - learning_rate * &weight_err;
+self.bias = &self.bias - learning_rate * &output_error;
+inp_err
+```

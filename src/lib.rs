@@ -79,7 +79,7 @@ impl Layer {
     ///
     /// A new `Layer` instance with random weights and biases.
     pub fn init(inps: usize, neur: usize) -> Self {
-        let w = Array::random((neur, inps), Uniform::new(-1., 1.));
+        let w = Array::random((neur, inps), Uniform::new(-0.5, 0.5));
         let b = Array::random((neur, 1), Uniform::new(-0.5, 0.5));
         Layer {
             weights: w,
@@ -105,13 +105,12 @@ impl Layer {
     }
 
     pub fn backward(&mut self, output_error: Array2<f64>, learning_rate: f64) -> Array2<f64> {
-        let output_error = self.activation.apply_der(&self.output).t().to_owned() * output_error;
+        let output_error = self.activation.apply_der(&self.output) * output_error;
         self.grad_computed = true;
-        let inp_err = output_error.dot(&self.weights);
-        let weight_err = self.input.dot(&output_error);
-        self.weights = &self.weights - learning_rate * &weight_err.t();
-        //println!("weights : {:?}", weight_err);
-        self.bias = &self.bias - learning_rate * &output_error.t();
+        let inp_err = self.weights.t().dot(&output_error);
+        let weight_err = output_error.dot(&self.input.t());
+        self.weights = &self.weights - learning_rate * &weight_err;
+        self.bias = &self.bias - learning_rate * &output_error;
         inp_err
     }
 
@@ -163,7 +162,7 @@ impl Layer {
         self.input = inp;
         let a = self.activation.apply(&a);
         self.output_act = a.clone();
-        a.to_shape((1, a.len())).unwrap().to_owned()
+        a
     }
 
     /// Returns the shape of the input and the output of the layer.
